@@ -43,6 +43,11 @@ const Search = () => {
                     className="btn btn-success btn-block"
                 />
             </form>
+            {users.length > 0 && (
+                <button className="btn btn-danger btn-block" onClick={clearUsers}>
+                    Clear
+                </button>
+            )}
             <Users users={users} />
         </div>
     );
