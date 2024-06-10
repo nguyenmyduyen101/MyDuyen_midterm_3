@@ -1,32 +1,27 @@
-import axios from "axios";
-import React, { useState } from "react";
-import Users from "./Users";
+import React, { useState } from 'react';
+import { searchUsers } from '../../api/api';
+import Users from './Users';
 const Search = () => {
     const [text, setText] = useState("");
     const [users, setUsers] = useState([]);
-    const searchUsers = async (text) => {
+    const handleSearchUsers = async (text) => {
         try {
-            const response = await axios.get(
-                `https://api.github.com/search/users?q=${text} `
-            );
-            setUsers(response.data.items);
+            const result = await searchUsers(text);
+            setUsers(result.items);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
-    const clearUsers = () => {
-        setUsers([]);
-    };
+    const clearUsers = () => setUsers([]);
     const onSubmit = (e) => {
         e.preventDefault();
-        if (text === "") {
-            alert("Please enter something");
+        if (text) {
+            handleSearchUsers(text);
+            setText('');
         } else {
-            searchUsers(text);
-            setText("");
+            alert('Please enter something');
         }
     };
-    const onChange = (e) => setText(e.target.value);
     return (
         <div>
             <form onSubmit={onSubmit} className="form">
@@ -35,7 +30,7 @@ const Search = () => {
                     name="text"
                     placeholder="Search User"
                     value={text}
-                    onChange={onChange}
+                    onChange={(e) => setText(e.target.value)}
                 />
                 <input
                     type="submit"
